@@ -27,8 +27,8 @@ class Star
   def animate
     @z += @zs
     d = (@z == DEPTH ? 1 : DEPTH.to_f / (DEPTH - @z))
-    x2 = ((@x * d) + (COLS / 2)).round
-    y2 = ((@y * d) + (ROWS / 2)).round
+    x2 = (@x * d + COLS / 2).round
+    y2 = (@y * d + ROWS / 2).round
     ch = SIZES[@z.to_f / DEPTH * SIZES.size]
     (x2 < COLS && y2 < ROWS) && "\e[#{y2};#{x2}H#{ch}" || (reset && '')
   end
