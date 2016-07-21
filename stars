@@ -1,0 +1,37 @@
+#!/usr/bin/env ruby
+
+COLS = `tput cols`.to_i
+ROWS = `tput lines`.to_i
+DEPTH = [COLS, ROWS].max
+MAX = (COLS * ROWS * 0.05).round
+SIZES = %w(. * 💩 ).freeze
+
+def main
+  stars = Array.new(MAX) { |_i| Star.new }
+  loop do
+    print "\e[s\e[2J#{stars.map(&:animate).join}\e[u"
+    sleep 0.1
+  end
+end
+
+class Star
+  def reset
+    @x = rand(COLS * 2) - COLS / 2
+    @y = rand(ROWS * 2) - ROWS / 2
+    @z = 1
+    @zs = rand(10) + 3
+  end
+
+  alias initialize reset
+
+  def animate
+    @z += @zs
+    d = (@z == DEPTH ? 1 : DEPTH.to_f / (DEPTH - @z))
+    x2 = ((@x * d) + (COLS / 2)).round
+    y2 = ((@y * d) + (ROWS / 2)).round
+    ch = SIZES[@z.to_f / DEPTH * SIZES.size]
+    (x2 < COLS && y2 < ROWS) && "\e[#{y2};#{x2}H#{ch}" || (reset && '')
+  end
+end
+
+main
