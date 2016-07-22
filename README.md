@@ -8,3 +8,9 @@ https://en.wikipedia.org/wiki/ANSI_escape_code
 ```sh
 curl -s https://raw.githubusercontent.com/ddrscott/ansinine/master/stars | ruby
 ```
+
+
+**Fire**
+```ssh
+curl -s https://raw.githubusercontent.com/ddrscott/ansinine/master/fire.rb | ruby
+```
