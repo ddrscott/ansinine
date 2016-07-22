@@ -2,7 +2,7 @@
 
 COLS = `tput cols`.to_i
 ROWS = `tput lines`.to_i
-NUM_DOTS = COLS * ROWS
+NUM_DOTS = COLS * ROWS + COLS
 NUM_COLORS = 24
 ANSI_MAP = Array.new(NUM_COLORS) { |i| "\e[48;5;#{232 + i}m " }
 
@@ -16,12 +16,12 @@ def main
     reset_bottom
     blend
     draw
-    sleep 0.03
+    sleep 0.1
   end
 end
 
 def reset_bottom
-  COLS.times { |x| $dots[NUM_DOTS - x - 1] = rand(2) * NUM_COLORS }
+  COLS.times { |x| $dots[NUM_DOTS - x - 1] = rand(NUM_COLORS) }
 end
 
 def value_at(idx, offset)
@@ -36,7 +36,7 @@ def blend
     right = value_at(i, 1)
     left = value_at(i, -1)
 
-    $buffer[i - COLS] = (above + below + left + right + $dots[i]) / 5 if i > COLS
+    $buffer[i - COLS] = (above + below + left + right + $dots[i]) / 5 
   end
   # swap buffers
   $buffer, $dots = $dots, $buffer
