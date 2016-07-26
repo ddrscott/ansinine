@@ -9,15 +9,18 @@ ANSI_MAP = Array.new(NUM_COLORS) { |i| "\e[48;5;#{232 + i}m " }
 $dots = Array.new(NUM_DOTS) { 0 }
 $buffer = Array.new(NUM_DOTS) { 0 }
 
-srand(1)
 
 def main
+  srand
+  STDERR.print "\e[?47h"     # use alternate terminal screen output
   loop do
     reset_bottom
     blend
     draw
     sleep 0.1
   end
+ensure
+  STDERR.print "\e[?47l"     # switch back to primary screen
 end
 
 def reset_bottom
@@ -51,7 +54,8 @@ def draw
     end
     chars << "\n" unless y == ROWS - 1
   end
-  print "\e[2J\e[1;1H#{chars.join}\e[#{ROWS};#{COLS}H\e[0m"
+  STDERR.print "\e[2J\e[1;1H#{chars.join}\e[#{ROWS};#{COLS}H\e[0m"
+  STDERR.flush
 end
 
 main
