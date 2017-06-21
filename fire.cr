@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+#!/usr/bin/env crystal
 
 COLS = `tput cols`.to_i
 ROWS = `tput lines`.to_i
@@ -8,8 +8,8 @@ ANSI_MAP = Array.new(NUM_COLORS) { |i| "\e[48;5;#{232 + i}m " }
 
 class Scene
   def initialize
-    @dots = Array.new(NUM_DOTS) { 0 }
-    @buffer = Array.new(NUM_DOTS) { 0 }
+    @dots = Array(Int32).new(NUM_DOTS) { 0 }
+    @buffer = Array(Int32).new(NUM_DOTS) { 0 }
   end
 
   def run
@@ -48,7 +48,7 @@ class Scene
   end
 
   def draw
-    chars = []
+    chars = [] of String
     ROWS.times do |y|
       COLS.times do |x|
         dot = @dots[y * COLS + x]
