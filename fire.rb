@@ -14,15 +14,15 @@ class Scene
 
   def run
     # srand
-    STDOUT.print "\e[?47h"     # use alternate terminal screen output
+    STDOUT.print "\e[?47h\e[?25l"     # use alternate terminal screen output
     loop do
       reset_bottom
       blend
       draw
-      sleep 0.12321
+      sleep 0.01
     end
   ensure
-    STDOUT.print "\e[?47l"     # switch back to primary screen
+    STDOUT.print "\e[?47l\e[?25h"     # switch back to primary screen
   end
 
   def reset_bottom
@@ -52,12 +52,10 @@ class Scene
     ROWS.times do |y|
       COLS.times do |x|
         dot = @dots[y * COLS + x]
-        chars << (ANSI_MAP[dot] || ANSI_MAP.last)
+        chars << "\e[#{y};#{x}H#{ANSI_MAP[dot] || ANSI_MAP.last}"
       end
-      chars << "\n" unless y == ROWS - 1
     end
-    STDOUT.print "\e[2J\e[0;0H#{chars.join}\e[#{ROWS};#{COLS}H\e[0m"
-    STDOUT.flush
+    STDOUT.print "#{chars.join}\e[#{ROWS-1};#{COLS-1}H\e[0m"
   end
 end
 Scene.new.run
